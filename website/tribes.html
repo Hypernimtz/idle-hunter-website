@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Explore Idle Hunter, a Discord hunting game. Learn the commands, build your camp, join a tribe, and find support."><meta name="color-scheme" content="dark"><title>Tribes | Idle Hunter</title><link rel="stylesheet" href="styles.css?v=8"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=Schibsted+Grotesk:wght@400;500;600&amp;family=Martian+Mono:wght@400;500&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="theme.css?v=11"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><style>.role-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin:32px 0 56px}.role-card{padding:24px;border:1px solid #383838;border-radius:16px;text-align:center}.role-card img{display:block;width:80px;height:80px;object-fit:contain;margin:0 auto 16px;filter:drop-shadow(0 0 6px #ffffff22)}.role-emoji{display:block;font-size:52px;line-height:1;margin:0 auto 16px}.role-card h2{font-size:1.15rem;margin:0 0 10px}.role-card p{font-size:.9rem;line-height:1.6;color:#c3cbd4;margin:0}.tribe-section{margin:56px 0}.tribe-section h2{font-size:1.6rem;margin:0 0 8px}.tribe-section .lede{max-width:700px;color:#aebed1;font-size:15px;margin:0 0 26px}.stat-table{width:100%;border-collapse:collapse;margin:18px 0 8px;max-width:640px}.stat-table th,.stat-table td{padding:12px 16px;text-align:left;border-top:1px solid #2c4058;font-size:14px}.stat-table th{color:#aebed1;font-weight:600}.stat-table td{color:#eef2f7}.unlock-row{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}.unlock-pill{border:1px solid #3a4c63;border-radius:999px;padding:8px 16px;font-size:13px;color:#dbe5f2}.unlock-pill b{color:#f2bf60}.contract-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:22px}.contract-card{padding:22px;border:1px solid #2c4058;border-radius:12px;background:#142131}.contract-card h3{margin:0 0 10px;font-size:1.05rem;color:#fff}.contract-card p{font-size:14px;color:#c3cbd4;margin:0}.exped-card{border:1px solid #2c4058;border-radius:14px;padding:26px;background:#142131;margin-bottom:22px}.exped-card h3{margin:0 0 6px;font-size:1.25rem}.exped-card .lede{margin:0 0 18px}.route-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.route-card{border:1px solid #2c4058;border-radius:10px;padding:16px;background:#0f1926}.route-card h4{margin:0 0 8px;font-size:.95rem;color:#f2bf60}.route-card p{font-size:13px;color:#c3cbd4;margin:0 0 10px}.route-card .meta{font-size:12px}.perk-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:22px}.perk-card{border:1px solid #2c4058;border-radius:12px;padding:20px;background:#142131;text-align:center}.perk-card strong{display:block;font-size:1.3rem;color:#f2bf60;margin-bottom:6px}.perk-card span{font-size:13px;color:#c3cbd4}#tribes-status{margin:22px 0 0}@media(max-width:900px){.role-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.contract-grid,.route-grid,.perk-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.role-grid,.contract-grid,.route-grid,.perk-grid{grid-template-columns:1fr}}</style></head><body><div class="scroll-progress" aria-hidden="true"></div><a class="skip" href="#main">Skip to content</a><header><nav aria-label="Main navigation"><a class="brand" href="index.html">Idle <span>Hunter</span></a><button class="mobile-toggle" aria-controls="page-tabs" aria-expanded="false" hidden>Menu</button><div class="links" id="page-tabs"><a href="index.html"><span data-scramble aria-hidden="true">Welcome</span><span class="screen-reader">Welcome</span></a><a href="commands.html"><span data-scramble aria-hidden="true">Commands</span><span class="screen-reader">Commands</span></a><a href="biomes.html"><span data-scramble aria-hidden="true">Biomes</span><span class="screen-reader">Biomes</span></a><a href="animals.html"><span data-scramble aria-hidden="true">Animals</span><span class="screen-reader">Animals</span></a><a href="weapons.html"><span data-scramble aria-hidden="true">Weapons</span><span class="screen-reader">Weapons</span></a><a href="ammo.html"><span data-scramble aria-hidden="true">Ammo</span><span class="screen-reader">Ammo</span></a><a href="leaderboard.html">Leaderboard</a><a href="tribes.html" aria-current="page">Tribes</a><a href="badges.html">Badges</a></div></nav></header><main id="main" class="wrap">
+
+<div class="eyebrow">Idle Hunter / Team up</div>
+<h1>Tribes</h1>
+<p class="intro">Join or lead a tribe to share boosts, chase weekly contracts, and climb the tribe leaderboard together. Use <code>/tribe create</code> or <code>/tribe menu</code> in Discord to get started.</p>
+
+<section class="tribe-section">
+<h2>Roles</h2>
+<p class="lede">Every tribe has one Leader, any number of Officers and Members, and Recruits on a 24-hour probation before they're promoted to full Member.</p>
+<div class="role-grid">
+<article class="role-card"><img src="assets/tribe/leader.png" alt="Leader icon" loading="lazy" width="80" height="80"><h2>Leader</h2><p>Full control — invite, kick, promote, set the description, and disband.</p></article>
+<article class="role-card"><img src="assets/tribe/officer.png" alt="Officer icon" loading="lazy" width="80" height="80"><h2>Officer</h2><p>Trusted help — invite and kick members, run the Perk Shop and Contracts.</p></article>
+<article class="role-card"><span class="role-emoji" role="img" aria-label="Member icon">🧑</span><h2>Member</h2><p>Full participation — hunts, quests and dailies all feed the tribe's XP.</p></article>
+<article class="role-card"><span class="role-emoji" role="img" aria-label="Recruit icon">🌱</span><h2>Recruit</h2><p>New joiners. Auto-promoted to Member after 24 hours in the tribe.</p></article>
+</div>
+</section>
+
+<section class="tribe-section">
+<h2>Progression</h2>
+<p class="lede">Tribes level up from banked Tribe XP. Leveling raises the member cap and unlocks new features, up to the level cap of 30.</p>
+<table class="stat-table"><thead><tr><th>Tribe level</th><th>Member cap</th></tr></thead><tbody>
+<tr><td>1+</td><td>10</td></tr>
+<tr><td>5+</td><td>12</td></tr>
+<tr><td>10+</td><td>15</td></tr>
+<tr><td>15+</td><td>18</td></tr>
+<tr><td>20+</td><td>20 (max)</td></tr>
+</tbody></table>
+<p class="meta">XP to reach the next level: 1,000 for Level 1→2, +400 per level after that. The Perk Shop can also buy extra member slots directly.</p>
+<div class="unlock-row">
+<span class="unlock-pill"><b>Level 2</b> — Weekly Contracts</span>
+<span class="unlock-pill"><b>Level 3</b> — Treasury <span class="meta">(coming soon)</span></span>
+<span class="unlock-pill"><b>Level 8</b> — Expeditions</span>
+<span class="unlock-pill"><b>Level 10</b> — Tribe Boss <span class="meta">(coming soon)</span></span>
+</div>
+<table class="stat-table"><thead><tr><th>Earning Tribe XP</th><th>Amount</th><th>Cap</th></tr></thead><tbody>
+<tr><td>Successful hunt</td><td>+1 XP</td><td>100 / member / day</td></tr>
+<tr><td>Claiming <code>/daily</code></td><td>+25 XP</td><td>once / member / day</td></tr>
+<tr><td>Completing a <code>/quests</code> task</td><td>+50 XP</td><td>2 / member / day</td></tr>
+<tr><td>Weekly Contract (Hunting / Exploration / Teamwork)</td><td>+500 / 400 / 700 XP</td><td>tribe-wide, once each</td></tr>
+</tbody></table>
+</section>
+
+<section class="tribe-section">
+<h2>Weekly Contracts</h2>
+<p class="lede">Unlocked at Tribe Level 2. Three shared goals reset every week — everyone's contribution counts toward the same bar.</p>
+<div class="contract-grid">
+<article class="contract-card"><h3>Combined Haul</h3><p>Catch animals as a tribe — the target scales with your member count.</p></article>
+<article class="contract-card"><h3>Spread Out</h3><p>Hunt across 3–5 different biomes as a tribe this week.</p></article>
+<article class="contract-card"><h3>All Hands</h3><p>Get enough members to each complete 2 personal tasks this week.</p></article>
+</div>
+</section>
+
+<section class="tribe-section">
+<h2>Expeditions</h2>
+<p class="lede">Unlocked at Tribe Level 8. Vote on a route as a group, then fill a shared progress bar with hunts, catches, myth kills, dailies and quests before time runs out.</p>
+
+<div class="exped-card">
+<h3>🗿 The Abandoned Temple</h3><p class="lede">A temple swallowed by jungle. Nobody who mapped it came back with the map. — 8 hours.</p>
+<div class="route-grid">
+<article class="route-card"><h4>🚪 The Front Gate</h4><p>Direct and defended. Steady progress, fair reward.</p><p class="meta">900 XP · Rare Crate</p></article>
+<article class="route-card"><h4>🌊 The Flooded Tunnels</h4><p>Longer, nastier, richer. Best rewards if you finish.</p><p class="meta">1,500 XP · Epic Crate</p></article>
+<article class="route-card"><h4>🧗 The Cliff Path</h4><p>Exposed and slow, but you see everything coming.</p><p class="meta">1,100 XP · Rare Crate</p></article>
+</div>
+</div>
+
+<div class="exped-card">
+<h3>🦬 Follow the Great Migration</h3><p class="lede">The herds are crossing three regions. Shadow them and take what the land gives. — 6 hours.</p>
+<div class="route-grid">
+<article class="route-card"><h4>🏃 Run With the Front</h4><p>Fast and first to everything. Standard haul.</p><p class="meta">800 XP · Rare Crate</p></article>
+<article class="route-card"><h4>🐺 Work the Flanks</h4><p>Where the predators are — and the prizes.</p><p class="meta">1,300 XP · Epic Crate</p></article>
+<article class="route-card"><h4>🧹 Sweep the Rear</h4><p>Slow going, but nothing gets past you.</p><p class="meta">1,000 XP · Rare Crate</p></article>
+</div>
+</div>
+</section>
+
+<section class="tribe-section">
+<h2>Perk Shop</h2>
+<p class="lede">Leaders and Officers can spend gems on tribe-wide boosts. Luck, Sell and XP boosts each cap at 200%.</p>
+<div class="perk-grid">
+<article class="perk-card"><strong>Luck +5%</strong><span>50 gems</span></article>
+<article class="perk-card"><strong>Sell Price +5%</strong><span>50 gems</span></article>
+<article class="perk-card"><strong>XP +5%</strong><span>50 gems</span></article>
+<article class="perk-card"><strong>+1 Member Slot</strong><span>100 gems</span></article>
+</div>
+</section>
+
+<section class="tribe-section">
+<h2>Top Tribes</h2>
+<p class="lede">Live from the bot, ranked by Tribe level. See every ranking on the full <a href="leaderboard.html">Leaderboard</a>.</p>
+<p id="tribes-status" class="meta" role="status">Loading rankings…</p>
+<div id="tribes-empty" class="note" hidden>The bot has not sent any tribe rankings yet. In the meantime, use <code>/leaderboard</code> in Discord.</div>
+<div id="tribes-table-wrap" class="ranking-table-wrap" hidden><table><caption>Global tribe rankings</caption><thead><tr><th scope="col">Rank</th><th scope="col">Tribe</th><th scope="col">Level</th></tr></thead><tbody id="tribes-rows"></tbody></table></div>
+<noscript><p>Enable JavaScript to load the published rankings, or use <code>/leaderboard</code> in Discord.</p></noscript>
+</section>
+
+</main><footer><div><span>Idle Hunter · An independent Discord game</span><span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></span><a href="https://discord.gg/X9JzdxeS8p">Contact support</a></div></footer><script src="site.js?v=8"></script><button id="to-top" class="to-top" hidden aria-label="Back to top">↑ Top</button><script src="effects.js?v=8"></script><script src="tribes.js?v=1"></script></body></html>

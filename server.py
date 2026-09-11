@@ -9,7 +9,7 @@ from pathlib import Path
 from flask import Flask, abort, jsonify, request, send_from_directory
 
 ROOT = Path(__file__).resolve().parent / 'website'
-KEYS = ('level', 'money', 'prestige', 'caught', 'tribes')
+KEYS = ('level', 'money', 'prestige', 'caught', 'myths', 'tracking', 'regions', 'tribes')
 app = Flask(__name__, static_folder=None)
 app.config['MAX_CONTENT_LENGTH'] = 256 * 1024
 # One Gunicorn worker, multiple threads: a single shared, rebuildable snapshot.
