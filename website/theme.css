@@ -22,6 +22,7 @@ body{color:#eceff3}.intro,.steps p,.command p,.card p,.faq p,.feature-strip span
 /* Transparent equipment panels. */
 .picture-slot.has-custom-image[data-kind="weapons"],.picture-slot.has-custom-image[data-kind="ammo"]{background:transparent;border-bottom:0}.picture-slot[data-kind="weapons"] img,.picture-slot[data-kind="ammo"] img{filter:drop-shadow(0 0 1px #edf6ff) drop-shadow(0 0 3px #dcecff55)}
 .ranking-controls{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin:32px 0 18px}.ranking-controls label{color:#d4dfed}.ranking-controls select{background:#172231;color:#fff;border:1px solid #8194ae;padding:12px 16px;font:inherit;max-width:100%}.ranking-table-wrap{overflow-x:auto;margin-top:24px;border:1px solid #4c6079}.ranking-table-wrap table{width:100%;border-collapse:collapse;min-width:320px}.ranking-table-wrap caption{text-align:left;padding:20px;color:#f4f7fc;font-weight:700}.ranking-table-wrap th,.ranking-table-wrap td{padding:16px 20px;text-align:left;border-top:1px solid #34445a}.ranking-table-wrap th{color:#bacce3;font-size:14px}.ranking-table-wrap td{color:#f1f5fb}.ranking-table-wrap th:last-child,.ranking-table-wrap td:last-child{text-align:right}.ranking-table-wrap tbody tr:nth-child(-n+3){background:#142234}
+.rank-badge{width:20px;height:20px;object-fit:contain;vertical-align:-5px;margin-right:8px;filter:drop-shadow(0 0 3px #ffffff22)}
 
 /* Badge guide */
 .badge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin:32px 0 64px}

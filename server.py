@@ -10,6 +10,17 @@ from flask import Flask, abort, jsonify, request, send_from_directory
 
 ROOT = Path(__file__).resolve().parent / 'website'
 KEYS = ('level', 'money', 'prestige', 'caught', 'myths', 'tracking', 'regions', 'tribes')
+# Every icon slug with real artwork under website/assets/badges/<tier>/ — an
+# allow-list, not a trust-the-bot pass-through, so a bad payload can't point
+# an <img> at an arbitrary path. Platinum excludes ammo_variety: it has no
+# Platinum tier (see badges.html), so no platinum/ammo_variety.png exists.
+BADGE_ICONS_GOLD = frozenset({
+    'ammo_master', 'ammo_variety', 'blackjack_dealer', 'coinflip_tosser', 'crate_master',
+    'daily_daily', 'events_completer', 'game_master', 'legendary_hunter', 'leveler',
+    'lottery_winner', 'prestige_master', 'roulette_spinner', 'rps_npc',
+    'slots_human_machine', 'xp_explosion',
+})
+BADGE_ICONS_PLATINUM = BADGE_ICONS_GOLD - {'ammo_variety'}
 app = Flask(__name__, static_folder=None)
 app.config['MAX_CONTENT_LENGTH'] = 256 * 1024
 # One Gunicorn worker, multiple threads: a single shared, rebuildable snapshot.
@@ -33,14 +44,25 @@ def clean_payload(payload):
             raise ValueError('At most 100 entries per category')
         clean = []
         for entry in entries:
-            if not isinstance(entry, dict) or set(entry) != {'name', 'score'}:
-                raise ValueError('Only public name and score may be submitted')
+            if not isinstance(entry, dict) or not {'name', 'score'} <= set(entry) \
+                    or set(entry) - {'name', 'score', 'badge'}:
+                raise ValueError('Only public name, score and badge may be submitted')
             name, score = entry['name'], entry['score']
             if not isinstance(name, str) or not name.strip() or len(name) > 100 or any(ord(c) < 32 for c in name):
                 raise ValueError('Invalid display name')
             if not isinstance(score, str) or not re.fullmatch(r'0|[1-9][0-9]{0,99}', score):
                 raise ValueError('Score must be a nonnegative decimal string')
-            clean.append({'name': name, 'score': score})
+            clean_entry = {'name': name, 'score': score}
+            if 'badge' in entry:
+                badge = entry['badge']
+                if not isinstance(badge, dict) or set(badge) != {'icon', 'tier'}:
+                    raise ValueError('Invalid badge')
+                icon, tier = badge.get('icon'), badge.get('tier')
+                valid_icons = BADGE_ICONS_PLATINUM if tier == 'platinum' else BADGE_ICONS_GOLD
+                if tier not in ('gold', 'platinum') or icon not in valid_icons:
+                    raise ValueError('Invalid badge')
+                clean_entry['badge'] = {'icon': icon, 'tier': tier}
+            clean.append(clean_entry)
         # Preserve bot order for ties, enforce descending values otherwise.
         result[key] = sorted(clean, key=lambda row: int(row['score']), reverse=True)
     return result

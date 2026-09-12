@@ -54,5 +54,23 @@ class ReceiverTests(unittest.TestCase):
     def test_over_limit(self):
         bad=copy.deepcopy(self.payload);bad['rankings']['level']*=101
         self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
+    def test_badge_accepted_and_validated(self):
+        good=copy.deepcopy(self.payload)
+        good['rankings']['level'][0]['badge']={'icon':'leveler','tier':'platinum'}
+        self.assertEqual(self.client.post('/api/leaderboard',json=good,headers=self.headers).status_code,200)
+        result=self.client.get('/api/leaderboard').json
+        self.assertEqual(result['rankings']['level'][0]['badge'],{'icon':'leveler','tier':'platinum'})
+        # ammo_variety has no Platinum artwork — must be rejected at that tier
+        bad=copy.deepcopy(self.payload)
+        bad['rankings']['level'][0]['badge']={'icon':'ammo_variety','tier':'platinum'}
+        self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
+        # unknown icon slug
+        bad=copy.deepcopy(self.payload)
+        bad['rankings']['level'][0]['badge']={'icon':'made_up','tier':'gold'}
+        self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
+        # extra field inside badge
+        bad=copy.deepcopy(self.payload)
+        bad['rankings']['level'][0]['badge']={'icon':'leveler','tier':'gold','extra':1}
+        self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
 
 if __name__=='__main__':unittest.main()
