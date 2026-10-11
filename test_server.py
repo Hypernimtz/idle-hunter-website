@@ -9,6 +9,7 @@ import threading
 import time
 import unittest
 from pathlib import Path
+os.environ['CHANGELOG_FILE'] = os.path.join(__import__('tempfile').gettempdir(), 'ih-test-changelog.json')
 import server
 
 class ReceiverTests(unittest.TestCase):
@@ -64,6 +65,17 @@ class ReceiverTests(unittest.TestCase):
             self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
         bad=copy.deepcopy(self.payload);bad['rankings']['surprise']=[]
         self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
+    def test_changelog_endpoint(self):
+        entry = {'version': '26.10.10.1', 'title': 'T', 'message': '- a\n- b', 'date': 1790000000, 'date_iso': '2026-10-10T00:00:00Z'}
+        body = {'changelog': [entry]}
+        self.assertEqual(self.client.post('/api/changelog', json=body).status_code, 401)
+        self.assertEqual(self.client.post('/api/changelog', json=body, headers=self.headers).status_code, 200)
+        self.assertEqual(self.client.get('/api/changelog').json['changelog'], [entry])
+        for bad in ({'changelog': 'x'}, {'changelog': [{'version': 'nope'}]}, {'changelog': [], 'x': 1}, {'changelog': [dict(entry, message='x' * 5000)]}):
+            self.assertEqual(self.client.post('/api/changelog', json=bad, headers=self.headers).status_code, 400)
+        big = {'changelog': [dict(entry, message='x' * 3999) for _ in range(150)]}   # ~600 KB, over the leaderboard limit
+        self.assertEqual(self.client.post('/api/changelog', json=big, headers=self.headers).status_code, 200)
+        self.assertEqual(self.client.get('/changelog.html').status_code, 200)
     def test_over_limit(self):
         bad=copy.deepcopy(self.payload);bad['rankings']['level']*=101
         self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)

@@ -1,6 +1,8 @@
 """Idle Hunter website and authenticated leaderboard receiver."""
 import hmac
+import json
 import os
+import tempfile
 import re
 import threading
 import time
@@ -73,6 +75,62 @@ def clean_payload(payload):
         # Preserve bot order for ties, enforce descending values otherwise.
         result[key] = sorted(clean, key=lambda row: int(row['score']), reverse=True)
     return result
+
+# -- Changelog (pushed by the bot to POST /api/changelog, newest first) --
+CHANGELOG_LIMIT = 200
+CHANGELOG_BODY_LIMIT = 2 * 1024 * 1024
+_changelog = []
+_changelog_file = Path(os.environ.get('CHANGELOG_FILE') or Path(tempfile.gettempdir()) / 'idle-hunter-changelog.json')
+try:   # best effort: survive a worker restart; the bot re-pushes every 30 minutes anyway
+    _loaded = json.loads(_changelog_file.read_text(encoding='utf-8'))
+    if isinstance(_loaded, list):
+        _changelog = _loaded
+except (OSError, ValueError):
+    pass
+
+def clean_changelog(payload):
+    if not isinstance(payload, dict) or set(payload) != {'changelog'} or not isinstance(payload['changelog'], list):
+        raise ValueError('Expected changelog array')
+    if len(payload['changelog']) > CHANGELOG_LIMIT:
+        raise ValueError('At most %d changelog entries' % CHANGELOG_LIMIT)
+    out = []
+    for entry in payload['changelog']:
+        if not isinstance(entry, dict):
+            raise ValueError('Invalid changelog entry')
+        version, title, message = entry.get('version'), entry.get('title', ''), entry.get('message', '')
+        date, date_iso = entry.get('date', 0), entry.get('date_iso', '')
+        if not isinstance(version, str) or not re.fullmatch(r'[0-9]{1,4}(\.[0-9]{1,6}){1,4}', version):
+            raise ValueError('Invalid changelog version')
+        if not isinstance(title, str) or len(title) > 200 or not isinstance(message, str) or len(message) > 4000:
+            raise ValueError('Invalid changelog text')
+        if isinstance(date, bool) or not isinstance(date, int) or not isinstance(date_iso, str) or len(date_iso) > 30:
+            raise ValueError('Invalid changelog date')
+        out.append({'version': version, 'title': title, 'message': message, 'date': date, 'date_iso': date_iso})
+    return out
+
+@app.route('/api/changelog', methods=['GET', 'POST'])
+def changelog():
+    global _changelog
+    if request.method == 'GET':
+        with _lock:
+            return jsonify(changelog=list(_changelog))
+    request.max_content_length = CHANGELOG_BODY_LIMIT
+    supplied = request.headers.get('Authorization', '')
+    if not hmac.compare_digest(supplied.encode('utf-8'), ('Bearer ' + _secret).encode('utf-8')):
+        return jsonify(error='Unauthorized'), 401
+    if not request.is_json:
+        return jsonify(error='Use application/json'), 415
+    try:
+        entries = clean_changelog(request.get_json())
+    except ValueError as exc:
+        return jsonify(error=str(exc)), 400
+    with _lock:
+        _changelog = entries
+    try:
+        _changelog_file.write_text(json.dumps(entries), encoding='utf-8')
+    except OSError:
+        pass
+    return jsonify(status='updated', entries=len(entries))
 
 @app.after_request
 def headers(response):
