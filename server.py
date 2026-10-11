@@ -9,7 +9,9 @@ from pathlib import Path
 from flask import Flask, abort, jsonify, request, send_from_directory
 
 ROOT = Path(__file__).resolve().parent / 'website'
-KEYS = ('level', 'money', 'prestige', 'caught', 'myths', 'tracking', 'regions', 'tribes')
+KEYS = ('level', 'money', 'prestige', 'caught', 'lifetime_caught', 'myths', 'tracking', 'regions', 'tribes')
+# Boards a bot must always send; anything else in KEYS may be missing (an older bot) and is published empty.
+REQUIRED_KEYS = frozenset(KEYS) - {'lifetime_caught'}
 # Every icon slug with real artwork under website/assets/badges/<tier>/ — an
 # allow-list, not a trust-the-bot pass-through, so a bad payload can't point
 # an <img> at an arbitrary path. Platinum excludes ammo_variety: it has no
@@ -35,24 +37,29 @@ def clean_payload(payload):
     if not isinstance(payload, dict) or set(payload) != {'rankings'}:
         raise ValueError('Expected rankings only')
     incoming = payload['rankings']
-    if not isinstance(incoming, dict) or set(incoming) != set(KEYS):
+    if not isinstance(incoming, dict) or not REQUIRED_KEYS <= set(incoming) or set(incoming) - set(KEYS):
         raise ValueError('Missing ranking categories')
     result = {}
     for key in KEYS:
-        entries = incoming[key]
+        entries = incoming.get(key, [])
         if not isinstance(entries, list) or len(entries) > 100:
             raise ValueError('At most 100 entries per category')
         clean = []
         for entry in entries:
             if not isinstance(entry, dict) or not {'name', 'score'} <= set(entry) \
-                    or set(entry) - {'name', 'score', 'badge'}:
-                raise ValueError('Only public name, score and badge may be submitted')
+                    or set(entry) - {'name', 'score', 'badge', 'id'}:
+                raise ValueError('Only public name, score, badge and id may be submitted')
             name, score = entry['name'], entry['score']
             if not isinstance(name, str) or not name.strip() or len(name) > 100 or any(ord(c) < 32 for c in name):
                 raise ValueError('Invalid display name')
             if not isinstance(score, str) or not re.fullmatch(r'0|[1-9][0-9]{0,99}', score):
                 raise ValueError('Score must be a nonnegative decimal string')
             clean_entry = {'name': name, 'score': score}
+            if 'id' in entry:
+                # Short non-reversible tag from the bot that tells same-named players apart; never a Discord id.
+                if not isinstance(entry['id'], str) or not re.fullmatch(r'[0-9a-f]{4,16}', entry['id']):
+                    raise ValueError('Invalid id')
+                clean_entry['id'] = entry['id']
             if 'badge' in entry:
                 badge = entry['badge']
                 if not isinstance(badge, dict) or set(badge) != {'icon', 'tier'}:

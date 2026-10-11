@@ -31,3 +31,4 @@ body{color:#eceff3}.intro,.steps p,.command p,.card p,.faq p,.feature-strip span
 .badge-tier img{display:block;width:128px;height:128px;max-width:100%;object-fit:contain;background:transparent;border:0;filter:drop-shadow(0 0 5px #ffffff22);margin:0 auto 16px}
 .badge-tier h3{font-size:1rem;margin:0 0 8px}.badge-tier.gold h3{color:#f6d479}.badge-tier.platinum h3{color:#d8eafa}.badge-tier p{font-size:.9rem;line-height:1.65;color:#e0e0e0;margin:0}.badge-card>.meta{margin-top:20px}.badge-grid [hidden]{display:none!important}
 @media(max-width:720px){.badge-grid{grid-template-columns:1fr}.badge-grid .badge-card{padding:20px}.badge-tiers{gap:16px}}
+.rank-id{color:#8a8f98;font-size:.85em;font-family:"Martian Mono",monospace}

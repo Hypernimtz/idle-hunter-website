@@ -51,6 +51,19 @@ class ReceiverTests(unittest.TestCase):
         with self.client.get('/assets/demo.mp4',headers={'Range':'bytes=0-99'}) as r:
             self.assertEqual(r.status_code,206)
             self.assertEqual(len(r.data),100)
+    def test_lifetime_board_id_and_older_bot(self):
+        good=copy.deepcopy(self.payload)
+        good['rankings']['level'][0]['id']='a1b2c3d4'
+        self.assertEqual(self.client.post('/api/leaderboard',json=good,headers=self.headers).status_code,200)
+        self.assertEqual(self.client.get('/api/leaderboard').json['rankings']['level'][0]['id'],'a1b2c3d4')
+        old=copy.deepcopy(self.payload);del old['rankings']['lifetime_caught']
+        self.assertEqual(self.client.post('/api/leaderboard',json=old,headers=self.headers).status_code,200)
+        self.assertEqual(self.client.get('/api/leaderboard').json['rankings']['lifetime_caught'],[])
+        for bad_id in ('NOT-HEX!','x'*40,5):
+            bad=copy.deepcopy(self.payload);bad['rankings']['level'][0]['id']=bad_id
+            self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
+        bad=copy.deepcopy(self.payload);bad['rankings']['surprise']=[]
+        self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
     def test_over_limit(self):
         bad=copy.deepcopy(self.payload);bad['rankings']['level']*=101
         self.assertEqual(self.client.post('/api/leaderboard',json=bad,headers=self.headers).status_code,400)
